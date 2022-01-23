@@ -1,0 +1,38 @@
+//Writes a word into db+offset
+
+Input:
+DB_NO              Int               Data block nr
+OFFSET             Int               Data word offset
+VAL                Int               Data word value
+
+Temp:
+t_sav_ar1         DWORD         Address register 1
+t_sav_ar2         DWORD         Address register 2
+t_sav_db          Int
+t_sav_di          Int
+t_db_no           Int           DB number
+
+Return:
+
+
+////////////////////////////////////////////////////////////////////////////////
+      L     DBNO                        // DB register 1
+      T     #t_sav_db
+      TAR1  #t_sav_ar1                  // Address register 1
+
+
+////////////////////////////////////////////////////////////////////////////////
+      L     #DB_NO
+      T     #t_db_no
+      OPN   DB [#t_db_no]               // Open Data block
+      L     #OFFSET                     // OFFSET
+      SLD   3
+      OD    DW#16#84000000
+      LAR1                              // to address register 1
+      L     #VAL
+      T     W [AR1,P#0.0]               // write word
+
+
+////////////////////////////////////////////////////////////////////////////////
+      LAR1  #t_sav_ar1                  // Address register 1
+      OPN   DB [#t_sav_db]              // DB register 1
